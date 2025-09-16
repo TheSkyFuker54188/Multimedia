@@ -75,8 +75,8 @@ class KNearestNeighbor(object):
                 # not use a loop over dimension, nor use np.linalg.norm().          #
                 #####################################################################
                 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-
+                diff = X[i] - self.X_train[j]
+                dists[i, j] = np.sqrt(np.sum(diff * diff))
                 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
 
@@ -98,8 +98,8 @@ class KNearestNeighbor(object):
             # Do not use np.linalg.norm().                                        #
             #######################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-
+            diff = self.X_train - X[i]
+            dists[i, :] = np.sqrt(np.sum(diff * diff, axis=1))
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
 
@@ -126,10 +126,14 @@ class KNearestNeighbor(object):
         # HINT: Try to formulate the l2 distance using matrix multiplication    #
         #       and two broadcast sums.                                         #
         #########################################################################
-        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        
-        # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    X_sq = np.sum(X ** 2, axis=1, keepdims=True)            # (num_test,1)
+    train_sq = np.sum(self.X_train ** 2, axis=1, keepdims=True)  # (num_train,1)
+    cross = X @ self.X_train.T                               # (num_test,num_train)
+    dists_sq = X_sq + train_sq.T - 2 * cross
+    dists_sq = np.maximum(dists_sq, 0.0)
+    dists = np.sqrt(dists_sq)
+    # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
 
     def predict_labels(self, dists, k=1):
@@ -159,8 +163,8 @@ class KNearestNeighbor(object):
             # Hint: Look up the function numpy.argsort.                             #
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-
+            idx_sorted = np.argsort(dists[i])[:k]
+            closest_y = self.y_train[idx_sorted]
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
             #########################################################################
             # TODO:                                                                 #
@@ -170,8 +174,12 @@ class KNearestNeighbor(object):
             # label.                                                                #
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-
+            if closest_y.min() >= 0:
+                counts = np.bincount(closest_y)
+                y_pred[i] = np.argmax(counts)
+            else:
+                labels, counts = np.unique(closest_y, return_counts=True)
+                y_pred[i] = labels[np.argmax(counts)]
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         return y_pred
