@@ -110,9 +110,6 @@ class KNearestNeighbor(object):
 
         Input / Output: Same as compute_distances_two_loops
         """
-        num_test = X.shape[0]
-        num_train = self.X_train.shape[0]
-        dists = np.zeros((num_test, num_train))
         #########################################################################
         # TODO:                                                                 #
         # Compute the l2 distance between all test points and all training      #
@@ -126,14 +123,16 @@ class KNearestNeighbor(object):
         # HINT: Try to formulate the l2 distance using matrix multiplication    #
         #       and two broadcast sums.                                         #
         #########################################################################
-    # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    X_sq = np.sum(X ** 2, axis=1, keepdims=True)            # (num_test,1)
-    train_sq = np.sum(self.X_train ** 2, axis=1, keepdims=True)  # (num_train,1)
-    cross = X @ self.X_train.T                               # (num_test,num_train)
-    dists_sq = X_sq + train_sq.T - 2 * cross
-    dists_sq = np.maximum(dists_sq, 0.0)
-    dists = np.sqrt(dists_sq)
-    # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        # L2 距离平方展开: ||x - y||^2 = ||x||^2 + ||y||^2 - 2 x·y
+        X_sq = np.sum(X ** 2, axis=1, keepdims=True)          # (num_test, 1)
+        train_sq = np.sum(self.X_train ** 2, axis=1, keepdims=True)  # (num_train, 1)
+        cross = X @ self.X_train.T                            # (num_test, num_train)
+        dists_sq = X_sq + train_sq.T - 2 * cross
+        # 数值稳定：避免由于浮点误差导致出现极小的负值
+        np.maximum(dists_sq, 0.0, out=dists_sq)
+        dists = np.sqrt(dists_sq)
+        # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
 
     def predict_labels(self, dists, k=1):
