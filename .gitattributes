@@ -1,0 +1,7 @@
+Assignment1/notebooks/data/cifar-10-python.tar.gz filter=lfs diff=lfs merge=lfs -text
+MLP-Regularization/notebooks/data/cifar-10-python.tar.gz filter=lfs diff=lfs merge=lfs -text
+CNN-classification/notebooks/results/*.pth filter=lfs diff=lfs merge=lfs -text
+*.pth filter=lfs diff=lfs merge=lfs -text
+*.pt filter=lfs diff=lfs merge=lfs -text
+*.h5 filter=lfs diff=lfs merge=lfs -text
+*.ckpt filter=lfs diff=lfs merge=lfs -text
