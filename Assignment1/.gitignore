@@ -1,0 +1,24 @@
+# Ignore dataset tarballs and large data files
+Assignment1/notebooks/data/
+
+# Ignore results and model artifacts (optional)
+Assignment1/notebooks/results/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# model weights
+*.pth
+
+# virtual envs
+.env/
+.venv/
+.conda/
+
+# system files
+.DS_Store
+Thumbs.db
