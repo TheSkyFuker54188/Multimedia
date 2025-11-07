@@ -1,0 +1,37 @@
+[
+  {
+    "label": "Baseline (full)",
+    "metric": "sqeuclidean",
+    "band": "full",
+    "accuracy": 0.275,
+    "time_sec": 62.72298765182495
+  },
+  {
+    "label": "Sakoe-40",
+    "metric": "sqeuclidean",
+    "band": 40,
+    "accuracy": 0.27,
+    "time_sec": 55.86400890350342
+  },
+  {
+    "label": "Sakoe-20",
+    "metric": "sqeuclidean",
+    "band": 20,
+    "accuracy": 0.26,
+    "time_sec": 54.650256633758545
+  },
+  {
+    "label": "Euclidean-20",
+    "metric": "euclidean",
+    "band": 20,
+    "accuracy": 0.265,
+    "time_sec": 46.18821620941162
+  },
+  {
+    "label": "Cosine-20",
+    "metric": "cosine",
+    "band": 20,
+    "accuracy": 0.33,
+    "time_sec": 77.26781702041626
+  }
+]
